@@ -1,0 +1,57 @@
+alter session set "_ORACLE_SCRIPT"=true;
+create user PROYECTO identified by 1234 default tablespace users;
+grant all privileges to PROYECTO;
+
+//CREAR ROL 
+CREATE TABLE rol(
+id_rol INTEGER NOT NULL,
+nombre VARCHAR(30) NOT NULL,
+descripcion VARCHAR(40) NOT NULL,
+constraint pk_rol primary key (id_rol),
+constraint uk_rol_nombre unique (nombre)
+)
+TABLESPACE "USERS" ;
+
+//CREAR PERSONA
+CREATE TABLE persona(
+id_persona INTEGER NOT NULL,
+documento VARCHAR(20) NOT NULL,
+apellido1 VARCHAR(30) NOT NULL,
+apellido2 VARCHAR(30),
+nombre1 VARCHAR(30) NOT NULL,
+nombre2 VARCHAR(30),
+fecha_nac DATE NOT NULL,
+clave VARCHAR(20) NOT NULL,
+mail VARCHAR(40) NOT NULL,
+id_rol INTEGER NOT NULL,
+constraint pk_persona primary key (id_persona),
+constraint uk_persona_documento unique (documento),
+constraint uk_persona_mail unique (mail),
+constraint fk_persona_rol FOREIGN KEY (id_rol) REFERENCES rol(id_rol)
+)
+TABLESPACE "USERS" ;
+
+//CREAR FUNCIONALIDAD 
+
+CREATE TABLE funcionalidad(
+id_funcionalidad INTEGER NOT NULL,
+nombre VARCHAR(30) NOT NULL,
+descripcion VARCHAR(40) NOT NULL,
+constraint pk_funcionalidad primary key (id_funcionalidad),
+constraint uk_funcionalidad_nombre unique (nombre)
+)
+TABLESPACE "USERS" ;
+
+//CREAR ROL_FUNCION
+
+CREATE TABLE rol_funcion(
+id_rol_funcion INTEGER NOT NULL,
+id_rol INTEGER NOT NULL,
+id_funcionalidad INTEGER NOT NULL,
+constraint pk_rol_funcion primary key (id_rol_funcion),
+constraint uk_rol_funcion unique (id_rol, id_funcionalidad),
+constraint fk_rol_funcion_rol foreign key (id_rol) references rol(id_rol),
+constraint fk_rol_funcion_fun foreign key (id_funcionalidad) references funcionalidad(ID_FUNCIONALIDAD)
+)
+TABLESPACE "USERS" ;
+
